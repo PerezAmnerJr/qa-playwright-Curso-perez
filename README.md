@@ -90,7 +90,7 @@ npx playwright install
 
 ---
 
-## 🧪 Tests implementados
+## 🧪 Aqui muestro los Tests implementados
 
 Archivo: **`tests/clase01.spec.ts`** — 3 verificaciones sobre la carga de la página principal.
 
@@ -172,14 +172,55 @@ npx playwright test --ui
 
 ---
 
-## 🔜 Próxima clase
+---
 
-**Clase 2** — Navegación, esperas y capturas.
+# 🧪 Laboratorio 02 — Navegación, esperas y capturas
+
+Archivo: **`tests/clase02.spec.ts`** — 4 tests sobre https://www.demoblaze.com
+
+## Tests implementados
+
+### 1️⃣ Navegar al carrito y regresar al inicio
+Navega a la página principal, entra al carrito con `waitForURL` como espera explícita, y regresa con `goBack()`. Genera las evidencias `01-pagina-inicio.png` y `02-carrito-vacio.png`.
+
+### 2️⃣ Navegar a la categoría Phones y ver un producto
+Entra a la categoría Phones, espera los productos con `waitForSelector` (en lugar de `waitForResponse`, para no depender de endpoints internos que pueden cambiar), verifica que haya más de 0 productos, abre el primero y comprueba que el botón "Add to cart" sea visible. Genera `03-detalle-producto.png`.
+
+### 3️⃣ Capturar el navbar y el footer por separado
+Toma capturas de **elementos específicos** (no de página completa): el navbar (`#navbarExample`) y el footer (`#footc`). Genera `04-navbar.png` y `05-footer.png`.
+
+> **Adecuación realizada:** la versión inicial usaba el selector genérico `.container-fluid).last()`, que coincidía con un elemento oculto de la página y hacía fallar el test por timeout. Se corrigió usando el ID específico del footer (`#footc`), agregando `scrollIntoViewIfNeeded()` para desplazarse hasta él, y reemplazando el `if` opcional por una aserción `expect(...).toBeVisible()`, ya que la captura del footer pasó a ser un requisito obligatorio.
+
+### 4️⃣ Verificar tiempo de carga de la página
+Prueba de rendimiento básica: cronometra la carga completa con `Date.now()` y `waitForLoadState('load')`, imprime la métrica con `console.log` y verifica con `toBeLessThan(10000)` que cargue en menos de 10 segundos.
+
+## 📷 Evidencias
+
+La carpeta `evidencias/` se crea automáticamente con un hook `test.beforeAll` y contiene las capturas generadas por los tests:
+
+| Evidencia | Descripción |
+|---|---|
+| `01-pagina-inicio.png` | Página principal (captura completa) |
+| `02-carrito-vacio.png` | Carrito vacío (captura completa) |
+| `03-detalle-producto.png` | Detalle de un producto de Phones |
+| `04-navbar.png` | Solo el navbar (captura de elemento) |
+| `05-footer.png` | Solo el footer (captura de elemento) |
+
+## ✅ Resultados
+
+**4 de 4 tests aprobados** — 0 fallidos, 0 flaky, 0 omitidos.
+
+## 💭 Reflexión: auto-wait vs. sleep()
+
+Los tests automatizados ejecutan instrucciones más rápido de lo que una página web puede cargar, y la velocidad de carga de una página es variable: depende del internet, del servidor y del momento. Ahí nace el problema de las esperas.
+
+`sleep()` (en Playwright, `waitForTimeout`) pausa el test un tiempo fijo, decidido por nosotros los programadores como una adivinanza. Si la página carga más rápido de lo estimado, se desperdicia tiempo en cada corrida; si carga más lento, el test intenta interactuar con elementos que aún no existen y falla sin que haya ningún bug. Como la velocidad de la página cambia entre corridas, el mismo test puede pasar hoy y fallar mañana sin que nadie toque el código: eso es un test *flaky*, y hace que el equipo pierda confianza en la suite de pruebas.
+
+El auto-wait de Playwright resuelve el problema esperando **condiciones** en lugar de tiempo: antes de cada acción verifica automáticamente que el elemento exista, sea visible y esté habilitado, y actúa en el instante en que se cumple. Si la página es rápida, no desperdicia tiempo; si es lenta, espera lo necesario; y si el elemento nunca aparece, falla con razón, señalando un problema real.
+
+En este laboratorio lo aplicamos con esperas explícitas de la misma filosofía: `waitForURL` para esperar el cambio de página al ir al carrito, `waitForSelector` para esperar a que carguen los productos de la categoría Phones, y `waitForLoadState` para medir el tiempo de carga completo. En ningún test usamos tiempos fijos, y por eso la duración de cada corrida varió (por ejemplo, el tiempo de carga midió 1605ms una vez y 1255ms en otra) sin que ningún test fallara: cada uno esperó exactamente lo que la página necesitó.
+
+**Conclusión:** `sleep()` apuesta un tiempo fijo contra algo impredecible, produciendo tests lentos o inestables; el auto-wait espera la condición real, produciendo tests rápidos y confiables a la vez.
 
 ---
 
-<div align="center">
-
-**Amner Alberto Pérez Marroquín** · Carné 1790-227230
-
-</div>
