@@ -224,3 +224,33 @@ En este laboratorio lo aplicamos con esperas explícitas de la misma filosofía:
 
 ---
 
+Laboratorio 03 — Locators que doy a conocer 
+
+Archivo: tests/clase03.spec.ts — 6 tests de clase mas 3 tests reto (9 tests en total, todos pasando).
+
+Tests de clase
+
+Aplican los distintos tipos de locators de Playwright: por texto (getByText), por CSS (clases), por ID, por rol (getByRole), por atributo (getAttribute), encadenados (locator dentro de locator) y negacion (not.toBeVisible).
+
+Tests reto
+
+Reto 1: Locator por rol. Verifica el boton "Place Order" del carrito con getByRole('button').
+
+Reto 2: Locator con filter. Encuentra un producto especifico entre varios con filter hasText y lee su precio.
+
+Reto 3: Locator por atributo parcial. Verifica las categorias del sidebar mediante el selector onclick que contiene "byCat".
+
+Nota sobre el Reto 3: las 3 categorias podian localizarse por id, pero elegi el atributo onclick porque las tres comparten onclick="byCat(...)". Es mas semantico: identifica la accion de la categoria en lugar de un id de maquetacion.
+
+Caso de prueba
+
+casos-de-prueba/TC-001.md — Agregar un producto al carrito (Sony vaio i5). Documento formal con objetivo, precondiciones, datos de prueba, pasos y resultado esperado.
+
+Ejecucion
+
+Ejecutar los tests: npx playwright test clase03.spec.ts
+Ver el reporte: npx playwright show-report
+
+Resultado: 9 tests aprobados.
+s
+
