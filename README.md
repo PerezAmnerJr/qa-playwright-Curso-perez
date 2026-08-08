@@ -254,3 +254,41 @@ Ver el reporte: npx playwright show-report
 Resultado: 9 tests aprobados.
 s
 
+Clase 4 — Actions: primer test funcional completo.
+
+adjunto mi nombre Amner Alberto Perez Marroquin 
+
+
+Laboratorio 04 — Actions: primer test funcional completo
+
+Archivo: tests/clase04.spec.ts — 4 tests de clase mas 3 tests reto (7 tests en total, todos pasando).
+
+Tests de clase
+
+Registrar un nuevo usuario, login con reintentos, flujo completo (login, agregar producto y verificar carrito) y login con credenciales incorrectas. Se aplican actions como fill y click, manejo de dialogos del navegador, funcion auxiliar con reintentos (for y try/catch) y datos unicos con Date.now().
+
+Tests reto
+
+Reto 1: Llenar el formulario Place Order del carrito con fill (name, country, city, card) y verificar el boton Purchase.
+
+Reto 2: Cerrar el modal de login con su boton Close, usando last() porque hay dos botones con ese nombre.
+
+Reto 3: Llenar un campo, borrarlo con clear() y verificar que quede vacio con inputValue().
+
+Reflexion
+
+tareas/tarea-04.md — reflexion sobre los 7 principios del testing (ISTQB) y cual me parece mas importante.
+
+Evidencias
+
+Capturas generadas en la carpeta evidencias (registro-llenado y carrito-con-producto).
+
+Ejecucion
+
+Ejecutar los tests: npx playwright test clase04.spec.ts
+Ver el reporte: npx playwright show-report
+
+Resultado: 7 tests aprobados.
+
+
+gigggg
