@@ -291,4 +291,52 @@ Ver el reporte: npx playwright show-report
 Resultado: 7 tests aprobados.
 
 
-gigggg
+
+
+---
+
+# tAREA  05 — Assertions y técnicas de diseño de pruebas
+
+**SUT:** https://www.saucedemo.com
+
+## Archivos
+
+- `tests/clase05.spec.ts` — 10 tests base + 3 tests reto
+- `casos-de-prueba/tabla-decision-checkout.md` — tabla de decisión del checkout
+
+## Ejecución
+npx playwright test clase05.spec.ts
+
+Reporte HTML:
+
+npx playwright show-report
+## Tests
+
+**Sección A — Equivalencia y frontera**
+1. Login con credenciales correctas
+2. Usuario no existe
+3. Usuario bloqueado
+4. Campos vacíos (frontera de longitud mínima)
+
+**Sección B — Inventario**
+5. El inventario tiene 6 productos
+6. Formato del precio con regex
+7. Atributos y estados del botón
+
+**Sección C — Soft assertions**
+8. Múltiples propiedades del primer producto
+
+**Sección D — Tabla de decisión**
+9. Regla 1: logueado con items
+10. Regla 2: logueado sin items
+
+**Tests reto (Tarea 05)**
+11. `toHaveValue()` — ordenar el catálogo por precio
+12. `toBeFocused()` — foco del teclado en el login
+13. `toHaveCSS()` — estilo computado del botón Add to cart
+
+Los tres retos usan assertions que no aparecen en el laboratorio base.
+
+## Resultado fue lo siguiente 
+13 passed
+
