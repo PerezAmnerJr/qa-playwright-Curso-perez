@@ -340,3 +340,48 @@ Los tres retos usan assertions que no aparecen en el laboratorio base.
 ## Resultado fue lo siguiente 
 13 passed
 
+---
+
+# Clase 06 — Page Object Model (POM)
+
+**SUT:** https://www.saucedemo.com
+
+## Archivos
+
+- `tests/clase06.spec.ts` — 5 tests base + 3 tests reto (8 tests en total)
+- `pages/LoginPage.ts`, `pages/InventoryPage.ts`, `pages/CartPage.ts` — Page Objects del laboratorio base
+- `pages/CheckoutPage.ts`, `pages/MenuPage.ts` — Page Objects nuevos de la Tarea 06
+
+## Qué es el POM y por qué lo aplico
+
+Antes cada test tenía sus propios locators sueltos. Con POM cada pantalla de la app se convierte en una clase (un Page Object) que guarda sus locators y expone métodos de alto nivel (`login()`, `addProductByName()`, `proceedToCheckout()`). Si el ID de un botón cambia en producción, se corrige en un solo lugar, no en cada test que lo use.
+
+## Ejecución
+
+```bash
+npx playwright test clase06.spec.ts
+```
+
+Reporte HTML:
+
+```bash
+npx playwright show-report
+```
+
+## Tests
+
+**Tests de clase**
+1. Login exitoso con POM
+2. Login fallido con POM
+3. Flujo completo: login → agregar 2 productos → verificar carrito
+4. Verificar que el inventario tiene 6 productos
+5. Ordenar productos de mayor a menor precio
+
+**Tests reto (Tarea 06)**
+6. Reto 1 — `CheckoutPage`: completa una compra de principio a fin (login → carrito → checkout → formulario → finish)
+7. Reto 2 — `MenuPage`: abre el menú hamburguesa y prueba el flujo de logout
+8. Reto 3 — `removeProductByName()` en `InventoryPage`: quita productos del carrito y verifica que el badge desaparece al llegar a 0
+
+## Resultado
+
+8 passed
