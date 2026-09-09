@@ -385,3 +385,57 @@ npx playwright show-report
 ## Resultado
 
 8 passed
+
+
+---
+#Aqui muestro el procedimiento de los TEST: evidencias avanzadas
+# Clase 07 — Roles del equipo QA + Error, Defecto y Fallo + Evidencias profesionales
+
+**SUT:** https://www.saucedemo.com
+
+## Archivos
+
+- `tests/clase07.spec.ts` — 4 tests del laboratorio base con evidencias (screenshots)
+- `tests/tarea07.spec.ts` — 3 tests reto con técnicas nuevas (`test.step()`, `testInfo.attach()`, `toHaveScreenshot()`)
+- `tests/tarea07.spec.ts-snapshots/` — baseline de la comparación visual del Reto 3
+- `reportes/DR-001.md` — reporte de defecto simulado
+- `evidencias/` — screenshots generados por los 4 tests del laboratorio base
+
+## playwright.config.ts
+
+Se agregó `retries: 1` y `trace: 'on-first-retry'` para que Playwright reintente un test fallido una vez y capture la traza completa solo cuando eso pasa, sin generar trazas de tests que ya sabemos que funcionan.
+
+## Ejecución
+
+```bash
+npx playwright test clase07.spec.ts
+npx playwright test tarea07.spec.ts
+```
+
+Reporte HTML:
+
+```bash
+npx playwright show-report
+```
+
+## Tests — clase07.spec.ts
+
+1. Login exitoso — evidencia completa (screenshot antes/después del login)
+2. Documentar el flujo de compra completo (screenshots del inventario, producto agregado y carrito)
+3. Capturar el momento exacto de un defecto esperado (screenshot enfocado en el mensaje de error de `locked_out_user`)
+4. Comparar estados antes y después de una acción (badge del carrito vacío vs. con 1 producto)
+
+## Tests reto — tarea07.spec.ts
+
+1. **Reto 1** — `test.step()`: estructura el login en 3 pasos nombrados, visibles por separado en el reporte y el trace.
+2. **Reto 2** — `testInfo.attach()`: adjunta un archivo `.txt` con la cantidad de productos, la URL y la fecha directamente al reporte HTML.
+3. **Reto 3** — `toHaveScreenshot()`: compara la página del inventario contra una imagen de referencia (baseline). La primera corrida generó el baseline con `--update-snapshots`; las siguientes corridas comparan contra esa imagen.
+
+## Reflexión: Error, Defecto y Fallo
+
+Para el reporte `DR-001.md` cambié a propósito el valor esperado del badge del carrito de `'1'` a `'2'` en el Test 4. El test falló como se esperaba, y con el screenshot/video/trace que Playwright generó automáticamente redacté el reporte de defecto. Después revertí el cambio y los 4 tests volvieron a pasar, confirmando que el defecto fue simulado y no un bug real de saucedemo.
+
+## Resultado
+
+- `clase07.spec.ts`: 4 passed
+- `tarea07.spec.ts`: 3 passed
