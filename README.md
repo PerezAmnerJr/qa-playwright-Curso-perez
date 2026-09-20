@@ -439,3 +439,54 @@ Para el reporte `DR-001.md` cambié a propósito el valor esperado del badge del
 
 - `clase07.spec.ts`: 4 passed
 - `tarea07.spec.ts`: 3 passed
+
+---
+
+# Clase 08, Aqui muestro el Proceso Fundamental del Testing + Hooks y Suites de Prueba
+
+**SUT:** https://www.saucedemo.com
+
+## Archivos
+
+- `helpers/auth.ts` — función `loginAs(page, username)` reutilizable para login sin instanciar Page Objects
+- `tests/clase08.spec.ts` — 7 tests en 2 suites usando hooks (`beforeEach`/`afterEach`)
+- `tests/tarea08.spec.ts` — 3 tests reto: suite serial con página compartida, `test.slow()`, `test.skip()` dinámico
+- `documentos/sqa-plan-saucedemo.md` — SQA Plan mínimo (propósito, alcance, herramientas, criterios de salida)
+
+## Ejecución
+
+```bash
+npx playwright test clase08.spec.ts
+npx playwright test tarea08.spec.ts
+```
+
+Comparar paralelo vs. secuencial:
+
+```bash
+npx playwright test tests/clase08.spec.ts --workers=2
+npx playwright test tests/clase08.spec.ts --workers=1
+```
+
+## Tests — clase08.spec.ts
+
+**Suite 1 — Suite de inventario con hooks** (`beforeEach` hace login automático, `afterEach` captura screenshot solo si el test falla)
+1. El inventario muestra 6 productos
+2. Todos los productos tienen precio visible (formato `$9.99` con regex)
+3. Todos los productos tienen imagen visible
+4. El menú de hamburguesa funciona
+5. Logout funciona correctamente
+
+**Suite 2 — Comportamiento por tipo de usuario** (suite independiente, sin hooks compartidos)
+6. Usuario estándar puede completar el checkout
+7. Usuario de rendimiento degradado experimenta lentitud (hallazgo documentado: `performance_glitch_user` tiene delay artificial en el login)
+
+## Tests reto — tarea08.spec.ts
+
+1. **Reto 1** — Suite `serial` con página compartida: 3 tests que reutilizan la misma pestaña del navegador (creada en `beforeAll`, cerrada en `afterAll`), donde cada paso depende del anterior.
+2. **Reto 2** — `test.slow()`: marca el test del usuario con rendimiento degradado para triplicar su timeout, en vez de subir el timeout global.
+3. **Reto 3** — `test.skip()` dinámico: evalúa si el carrito tiene productos en tiempo de ejecución y omite el test con un mensaje explicando la razón, si no los tiene.
+
+## Los resultados 
+
+- `clase08.spec.ts`: 7 passed
+- `tarea08.spec.ts`: 4 passed, 1 skipped
