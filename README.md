@@ -490,3 +490,57 @@ npx playwright test tests/clase08.spec.ts --workers=1
 
 - `clase08.spec.ts`: 7 passed
 - `tarea08.spec.ts`: 4 passed, 1 skipped
+
+
+---
+
+# Clase 09 — Fixtures y Tests Parametrizados
+
+**SUT:** https://www.saucedemo.com
+
+## Archivos
+
+- `fixtures/index.ts` — 3 fixtures personalizados: loginPage, inventoryPage (ya logueado) y cartPage (con 1 producto agregado)
+- `tests/clase09.spec.ts` — 3 tests con fixtures + 3 de login parametrizado + 3 de productos parametrizados (9 tests en total)
+- `tests/tarea09.spec.ts` — 3 tests reto: fixture con teardown, fixture de scope worker y test.use() con viewports
+
+## Qué son los fixtures y por qué los uso
+
+yo pensaba que antes cada test repetía el mismo login o el mismo armado de carrito al principio. Con fixtures ese setup se escribe una sola vez y Playwright se lo entrega listo al test como parámetro (`loginPage`, `inventoryPage`, `cartPage`). El test ya no arranca desde cero, arranca desde el estado que necesita.
+
+## Ejecución
+
+```bash
+npx playwright test clase09.spec.ts
+npx playwright test tarea09.spec.ts
+```
+
+Reporte HTML:
+
+```bash
+npx playwright show-report
+```
+
+## Tests — clase09.spec.ts
+
+**Fixtures y datos de prueba**
+1. Usa el fixture `loginPage` para loguearse
+2. Usa el fixture `inventoryPage`, ya entra logueado directo al inventario
+3. Usa el fixture `cartPage`, ya entra con 1 producto en el carrito
+
+**Login parametrizado** (array con 3 casos: usuario válido, usuario bloqueado, contraseña incorrecta)
+4-6. Genera un test por cada caso del array y verifica la URL esperada
+
+**Agregar productos al carrito (parametrizado)** (array con 3 productos)
+7-9. Genera un test por producto y verifica que el badge del carrito suba
+
+## Tests reto — tarea09.spec.ts
+
+1. **Reto 1** — Fixture con teardown real: cronómetro que arranca antes del test y, después del `use()`, imprime cuánto tardó cada test.
+2. **Reto 2** — Fixture de scope `worker`: un contador que se crea una sola vez por worker y mantiene su valor entre tests (pasa de 1 a 2 sin reiniciarse).
+3. **Reto 3** — `test.use()` con parametrización: recorre un array de viewports (móvil y escritorio) y genera un test de visibilidad del login por cada uno.
+
+## Los resultados
+
+- `clase09.spec.ts`: 9 passed
+- `tarea09.spec.ts`: 6 passed
