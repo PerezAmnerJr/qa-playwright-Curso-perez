@@ -528,7 +528,7 @@ npx playwright show-report
 2. Usa el fixture `inventoryPage`, ya entra logueado directo al inventario
 3. Usa el fixture `cartPage`, ya entra con 1 producto en el carrito
 
-**Login parametrizado** (array con 3 casos: usuario válido, usuario bloqueado, contraseña incorrecta)
+**Login parametrizado** (array con 3 casos: usuario válido, usuario bloqueado, campos vacíos)
 4-6. Genera un test por cada caso del array y verifica la URL esperada
 
 **Agregar productos al carrito (parametrizado)** (array con 3 productos)
@@ -544,3 +544,57 @@ npx playwright show-report
 
 - `clase09.spec.ts`: 9 passed
 - `tarea09.spec.ts`: 6 passed
+
+
+
+
+# Clase 10 — Manual vs. Automatización + Multi-browser y Tags
+
+**SUT:** https://www.saucedemo.com
+
+## Archivos
+
+- `playwright.config.ts` — actualizado con 5 projects: chromium, firefox, webkit, mobile-chrome (Pixel 5) y mobile-safari (iPhone 12), `workers: 1`, screenshot, video y trace activados
+- `tests/clase10-smoke.spec.ts` — 5 tests `@smoke` con lo mínimo crítico del sistema
+- `tests/clase10-regression.spec.ts` — 5 tests `@regression` que verifican que lo que ya funcionaba siga funcionando
+- `tests/tarea10.spec.ts` — 3 tests reto: tags múltiples + `--grep-invert`, `expect.soft()` y fixture `browserName`
+
+## Ejecución
+
+```bash
+# aqui loo que hise fue Solo chromium (rápido)
+npx playwright test tests/clase10-smoke.spec.ts tests/clase10-regression.spec.ts tests/tarea10.spec.ts --project=chromium
+
+# genere el Multi-browser completo (5 projects)
+npx playwright test tests/clase10-smoke.spec.ts tests/clase10-regression.spec.ts tests/tarea10.spec.ts
+
+# Por tags
+npx playwright test --grep "@smoke"
+npx playwright test --grep "@regression"
+npx playwright test tests/tarea10.spec.ts --grep-invert "@ui"
+npx playwright test tests/tarea10.spec.ts --grep "@regression" --grep-invert "@ui"
+
+# aqui ejecute el comando show report dpara qeu muesytre el Reporte HTML
+npx playwright show-report
+```
+
+## Tests reto — tarea10.spec.ts
+
+1. **Reto 1** — Tags múltiples: cada test lleva 2 etiquetas (`['@regression', '@ui']`, `['@regression', '@critico']`, `['@smoke', '@critico']`). Con `--grep-invert "@ui"` se excluyen los tests de interfaz y corren solo los demás.
+2. **Reto 2** — `expect.soft()`: el test 2a revisa 5 atributos del Sauce Labs Backpack (nombre, precio, descripción, imagen y botón) sin detenerse en el primer fallo. El test 2b falla a propósito en 2 atributos (marcado con `test.fail()`) y demuestra que el test sigue hasta el final y `testInfo.errors` reporta los 2 errores juntos.
+3. **Reto 3** — Fixture `browserName`: en vez de saltar el test con `test.skip()`, la aserción se ajusta al motor real (Chrome en chromium, Firefox en firefox, AppleWebKit en webkit).
+
+## Reflexión
+
+1. **¿Algún test se comportó diferente en WebKit?** No, los 16 pasaron en los 5 navegadores. Lo único distinto fueron los tiempos: firefox y webkit tardaron un poco más que chromium. Podría haber diferencias porque cada motor interpreta HTML/CSS/JS de forma propia.
+2. **¿Cuántos tests se ejecutaron?** en llo que hise fue 80 en total (16 tests × 5 projects). Solo con los archivos del laboratorio serían 50 (10 × 5).
+3. **¿Por qué smoke antes que regression?** Porque si lo básico (login, inventario, carrito) no funciona, no tiene sentido gastar tiempo corriendo la regresión completa. El smoke detecta rápido si el build está roto.
+
+## Resultados
+
+- `--project=chromium`: 16 passed
+- `--grep-invert "@ui"`: 4 passed
+- `--grep "@regression" --grep-invert "@ui"`: 3 passed
+- Multi-browser completo: **80 passed (4.6m)**
+
+![Reporte multi-browser](evidencias/clase10-reporte-multibrowser.png)
