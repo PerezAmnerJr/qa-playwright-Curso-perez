@@ -598,3 +598,9 @@ npx playwright show-report
 - Multi-browser completo: **80 passed (4.6m)**
 
 ![Reporte multi-browser](evidencias/clase10-reporte-multibrowser.png)
+
+![16 passed en chromium](evidencias/clase10-chromium-16-passed.png)
+
+![Reto 1: grep-invert @ui](evidencias/clase10-grep-invert-ui.png)
+
+![Reto 1: grep @regression sin @ui](evidencias/clase10-grep-regression-sin-ui.png)
