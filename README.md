@@ -604,3 +604,64 @@ npx playwright show-report
 ![Reto 1: grep-invert @ui](evidencias/clase10-grep-invert-ui.png)
 
 ![Reto 1: grep @regression sin @ui](evidencias/clase10-grep-regression-sin-ui.png)
+
+
+
+---
+
+# Clase 11 — Gestión de Bugs y Depuración + GitHub Issues
+
+**SUT:** https://practice.expandtesting.com
+
+## Archivos
+
+- `tests/clase11.spec.ts` — laboratorio: 9 tests (login, elementos dinámicos, alertas, tabla, adjuntos al reporte HTML y defecto conocido de imágenes rotas con `test.fail()`)
+- `reportes/bug-report-clase11.md` — reporte del defecto BR-CLASE11-001 con severidad, prioridad, frecuencia, pasos y evidencia
+- `tests/tarea11.spec.ts` — 3 tests reto para documentar defectos con Playwright
+
+## Defectos registrados en GitHub Issues
+
+| Issue | Defecto | Severidad | Prioridad | Frecuencia |
+|---|---|---|---|---|
+| [#2](https://github.com/PerezAmnerJr/qa-playwright-Curso-perez/issues/2) | `/broken-images`: asdf.jpg y hjkl.jpg responden 404 | Baja | P3 | Siempre |
+| [#3](https://github.com/PerezAmnerJr/qa-playwright-Curso-perez/issues/3) | `/typos`: error ortográfico intermitente en el texto | Baja | P4 | Intermitente |
+
+## Ejecución
+
+```bash
+# Laboratorio
+npx playwright test tests/clase11.spec.ts --project=firefox
+
+# Tarea (debe dar 2 passed, 1 skipped)
+npx playwright test tests/tarea11.spec.ts --project=firefox
+
+# Reporte HTML
+npx playwright show-report
+```
+
+## Tests reto — tarea11.spec.ts
+
+1. **Reto 1** — Medir un defecto intermitente: recarga `/typos` 12 veces, cuenta en cuántas aparece el error (`won,t` en vez de `won't`) y deja la frecuencia en el reporte con `testInfo.annotations` y `testInfo.attach`. En la ejecución registrada apareció en 3 de 12 recargas (25%).
+2. **Reto 2** — `test.fixme` con anotación de issue: el test que exige el texto sin errores queda escrito pero no se ejecuta mientras el defecto siga abierto, y queda enlazado al Issue #3 con `{ annotation: { type: 'issue' } }`.
+3. **Reto 3** — Borrador de reporte desde un `afterEach`: si el test tiene errores, adjunta al reporte un borrador en Markdown con el título, el ambiente, la URL y el resultado obtenido. Se demuestra con el defecto de imágenes rotas, usando `expect.soft()` para que el borrador incluya todas las imágenes que fallan.
+
+**Ajuste realizado:** en la primera versión del Reto 1, una recarga se contó como error aunque el texto era correcto, porque la página pegó otro texto en la misma línea (falso positivo: 4 de 12 en lugar de 3). Se corrigió extrayendo solo la oración, desde "Sometimes" hasta el primer punto.
+
+## Resultados
+
+- `clase11.spec.ts` en Firefox: **9 passed** (el test de imágenes rotas es un fallo esperado con `test.fail()`)
+- `tarea11.spec.ts` en Firefox: **2 passed, 1 skipped**
+
+## Evidencias
+
+![Tarea 11 en terminal](evidencias/clase11-tarea11-terminal.png)
+
+![Reto 1: frecuencia](evidencias/clase11-reto1-frecuencia.png)
+
+![Reto 2: fixme con issue](evidencias/clase11-reto2-fixme-issue.png)
+
+![Reto 3: borrador del reporte](evidencias/clase11-reto3-borrador.png)
+
+![BUG-001: error](evidencias/clase11-bug001-error.png)
+
+![BUG-001: página](evidencias/clase11-bug001-pagina.png)g
