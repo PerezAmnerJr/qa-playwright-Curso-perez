@@ -4,7 +4,7 @@
 **Fecha:** 23/10/2026
 **Reportado por:** Amner Alberto Pérez Marroquín
 **Ambiente:** Windows 11, Firefox (Playwright, project `firefox`), https://practice.expandtesting.com/broken-images
-**Issue en GitHub:** [pendiente de enlazar]
+**Issue en GitHub:** [#2](https://github.com/PerezAmnerJr/qa-playwright-Curso-perez/issues/2)
 
 ## Descripción
 En la página Broken Images, dos de las imágenes no se muestran. El navegador recibe un error 404 al solicitarlas, por lo que su ancho real (`naturalWidth`) es 0.
